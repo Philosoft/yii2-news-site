@@ -32,6 +32,25 @@ $config = [
     */
 ];
 
+$commonConfig = [];
+$commonLocalConfig = [];
+
+$commonConfigFile = __DIR__ . "/common.php";
+if (is_readable($commonConfigFile)) {
+    $commonConfig = require ($commonConfigFile);
+}
+
+$commonLocalConfigFile = __DIR__ . "/common-local.php";
+if (is_readable($commonLocalConfigFile)) {
+    $commonLocalConfig = require ($commonLocalConfigFile);
+}
+
+$config = array_merge_recursive(
+    $config,
+    $commonConfig,
+    $commonLocalConfig
+);
+
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'gii';
