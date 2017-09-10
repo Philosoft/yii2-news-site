@@ -143,4 +143,12 @@ class News extends ActiveRecord
             ]
         );
     }
+
+    /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return $this->status == self::STATUS_ACTIVE;
+    }
 }
