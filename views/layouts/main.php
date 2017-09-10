@@ -34,26 +34,32 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
+    $links = [
+        ["label" => "News", "url" => ["/news/index"]],
+        ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => 'About', 'url' => ['/site/about']],
+        Yii::$app->user->isGuest ? (
+        ['label' => 'Login', 'url' => ['user/security/login']]
+        ) : (
+            '<li>'
+            . Html::beginForm(['user/security/logout'], 'post')
+            . Html::submitButton(
+                'Logout (' . Yii::$app->user->identity->username . ')',
+                ['class' => 'btn btn-link logout']
+            )
+            . Html::endForm()
+            . '</li>'
+        )
+    ];
+    if (Yii::$app->user->can(\app\models\News::PERMISSION__EDIT)) {
+        $links[] = [
+            "label" => "News CRUD",
+            "url" => ["/admin-news/index"]
+        ];
+    }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            ["label" => "News", "url" => ["/news/index"]],
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['user/security/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['user/security/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            )
-        ],
+        'items' => $links,
     ]);
     NavBar::end();
     ?>
