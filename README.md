@@ -1,5 +1,6 @@
 # Installation
 
+1. add `@app/config/db-local.php` with appropriate credentials
 1. install dependencies - `composer install`
 1. init yii2 rbac + yii2-usuario migrations - `./yii migrate --migrationPath=@yii/rbac/migrations`
 1. create default admin user `./yii user/create admin@mail.ru admin && ./yii user/confirm admin`
