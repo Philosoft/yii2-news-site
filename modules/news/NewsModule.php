@@ -25,7 +25,7 @@ class NewsModule extends Module implements BootstrapInterface
                 $authManager = \Yii::$app->authManager;
                 try {
                     $authManager->assign(
-                        $authManager->getRole(RbacController::ROLE_REGISTERED_USER),
+                        $authManager->getRole(RbacController::ROLE__REGISTERED_USER),
                         $user->getId()
                     );
                 } catch (\Exception $e) {

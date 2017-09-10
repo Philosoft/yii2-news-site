@@ -6,7 +6,7 @@ $db = require(__DIR__ . '/db.php');
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'news'],
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -32,14 +32,14 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                "/" => "/news/news/index"
             ],
         ],
-        'view' => [
-            'theme' => [
-                'pathMap' => [
-                    '@Da/User/resources/views' => '@app/views/user'
-                ]
-            ]
+    ],
+    'modules' => [
+        'news' => [
+            'class' => 'app\modules\news\NewsModule',
+            'controllerNamespace' => 'app\modules\news\controllers'
         ]
     ],
     'params' => $params,

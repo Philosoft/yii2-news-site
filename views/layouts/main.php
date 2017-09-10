@@ -3,6 +3,7 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
+use app\modules\news\models\News;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
@@ -35,14 +36,13 @@ AppAsset::register($this);
         ],
     ]);
     $links = [
-        ["label" => "News", "url" => ["/news/index"]],
-        ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => 'Home', 'url' => ['/']],
         ['label' => 'About', 'url' => ['/site/about']],
         Yii::$app->user->isGuest ? (
-        ['label' => 'Login', 'url' => ['user/security/login']]
+        ['label' => 'Login', 'url' => ['/user/security/login']]
         ) : (
             '<li>'
-            . Html::beginForm(['user/security/logout'], 'post')
+            . Html::beginForm(['/user/security/logout'], 'post')
             . Html::submitButton(
                 'Logout (' . Yii::$app->user->identity->username . ')',
                 ['class' => 'btn btn-link logout']
@@ -51,10 +51,10 @@ AppAsset::register($this);
             . '</li>'
         )
     ];
-    if (Yii::$app->user->can(\app\models\News::PERMISSION__EDIT)) {
+    if (Yii::$app->user->can(News::PERMISSION__UPDATE)) {
         $links[] = [
             "label" => "News CRUD",
-            "url" => ["/admin-news/index"]
+            "url" => ["/news/admin/index"]
         ];
     }
     echo Nav::widget([

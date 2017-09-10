@@ -2,7 +2,7 @@
 
 /**
  * @var \yii\web\View $this
- * @var \app\models\News $model
+ * @var \app\modules\news\models\News $model
  */
 
 ?>
@@ -13,7 +13,7 @@
         <div class="news-item__content">
             <div class="media">
                 <div class="media-left">
-                    <img src="<?= $model->image ?>" class="media-object">
+                    <img src="<?= $model->getImage() ?>" class="media-object">
                 </div>
                 <div class="media-body">
                     <?= $model->content ?>
