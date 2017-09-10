@@ -3,8 +3,7 @@
 
 namespace app\rbac;
 
-
-use app\models\News;
+use app\modules\news\models\News;
 use yii\rbac\Rule;
 
 class AuthorRule extends Rule
@@ -18,7 +17,8 @@ class AuthorRule extends Rule
         if (
             isset($params["post"])
             && $params["post"] instanceof News
-            && $params["post"]->author === $user
+            && $params["post"]->author !== null
+            && $params["post"]->author->getId() === $user
         ) {
             $result = true;
         }
