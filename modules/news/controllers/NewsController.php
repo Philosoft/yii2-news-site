@@ -71,7 +71,7 @@ class NewsController extends Controller
      */
     public function actionShow($id = 0)
     {
-        $newsItem = News::findOne($id);
+        $newsItem = News::findOne(["id" => $id, "status" => News::STATUS_ACTIVE]);
 
         if ($newsItem !== null) {
             return $this->render(
