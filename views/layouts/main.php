@@ -65,6 +65,18 @@ AppAsset::register($this);
         ];
     }
 
+    if (
+        array_key_exists(
+            \app\commands\RbacController::ROLE__ADMIN,
+            Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())
+        )
+    ) {
+        $links[] = [
+            "label" => "Users CRUD",
+            "url" => ["/user/admin/index"]
+        ];
+    }
+
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => $links,
