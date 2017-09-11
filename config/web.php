@@ -47,6 +47,9 @@ $config = [
         'news' => [
             'class' => 'app\modules\news\NewsModule',
             'controllerNamespace' => 'app\modules\news\controllers',
+        ],
+        'notification' => [
+            'class' => 'app\modules\notification\NotificationModule'
         ]
     ],
     'params' => $params,
