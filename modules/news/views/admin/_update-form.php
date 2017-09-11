@@ -11,6 +11,7 @@ use yii\widgets\Pjax;
 
 Pjax::begin(["enablePushState" => false]);
 
+/** @noinspection PhpUnhandledExceptionInspection */
 echo \app\widgets\FlashAlert::widget([
     "flashKey" => \app\modules\news\models\News::FLASH_KEY__UPDATE_STATUS,
     "htmlOptions" => [
@@ -33,7 +34,8 @@ $form = ActiveForm::begin([
     "options" => [
         "data" => [
             "pjax" => true
-        ]
+        ],
+        "id" => "update-form--" . date("His")
     ]
 ]);
 

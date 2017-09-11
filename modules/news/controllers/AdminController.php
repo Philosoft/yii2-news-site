@@ -124,7 +124,7 @@ class AdminController extends Controller
         $request = Yii::$app->request;
         $model = new News();
         if ($request->isGet) {
-            $method = $request->isAjax ? "renderAjax" : "render";
+            $method = ($request->isAjax && !$request->isPjax) ? "renderAjax" : "render";
             return $this->$method("_update-form", ['model' => $model]);
         } else {
             $model->setAttributes($request->post("News"), false);
@@ -140,7 +140,7 @@ class AdminController extends Controller
                 $message
             );
 
-            return $this->renderAjax(
+            return $this->render(
                 "_update-form",
                 ['model' => $model]
             );
