@@ -2,10 +2,12 @@
 
 /**
  * @var array $htmlOptions
- * @var string $message
+ * @var array|string $messages
  */
 
-echo \yii\bootstrap\Alert::widget([
-    "options" => $htmlOptions,
-    "body" => $message
-]);
+foreach ($messages as $message) {
+    echo \yii\bootstrap\Alert::widget([
+        "options" => $htmlOptions,
+        "body" => $message
+    ]);
+}

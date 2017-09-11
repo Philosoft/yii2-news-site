@@ -30,12 +30,15 @@ class FlashAlert extends Widget
             throw new InvalidConfigException("flashKey must be set");
         }
 
-        $message = trim(\Yii::$app->session->getFlash($this->flashKey));
-        if (!empty($message)) {
+        $messages = \Yii::$app->session->getFlash($this->flashKey);
+        if (!empty($messages)) {
+            if (!is_array($messages)) {
+                $messages = [$messages];
+            }
             return $this->render(
                 "flash-alert",
                 [
-                    "message" => $message,
+                    "messages" => $messages,
                     "htmlOptions" => $this->htmlOptions
                 ]
             );
