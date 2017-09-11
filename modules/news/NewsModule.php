@@ -7,12 +7,15 @@ namespace app\modules\news;
 use app\commands\RbacController;
 use app\models\Profile;
 use app\modules\news\models\News;
+use app\modules\notification\models\Notification;
 use Da\User\Event\UserEvent;
 use Da\User\Model\User;
 use Yii;
 use yii\base\BootstrapInterface;
 use yii\base\Event;
 use yii\base\Module;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 class NewsModule extends Module implements BootstrapInterface
 {
@@ -50,7 +53,19 @@ class NewsModule extends Module implements BootstrapInterface
                             /** @var Profile $profile */
                             $profile = $user->profile;
                             if ($profile->notification_type === Profile::NOTIFICATION_TYPE__ALERT) {
-
+                                $notification = new Notification();
+                                $notification->text = strtr(
+                                    Yii::$app->getModule("notification")->template,
+                                    [
+                                        "{postName}" => $model->title,
+                                        "{postUrl}" => Html::a(
+                                            "read",
+                                            ["/news/news/show", "id" => $model->id]
+                                        )
+                                    ]
+                                );
+                                $notification->link("user", $user);
+                                $notification->save();
                             }
 
                             if ($profile->notification_type === Profile::NOTIFICATION_TYPE__MAIL) {
