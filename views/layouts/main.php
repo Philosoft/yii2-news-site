@@ -57,6 +57,14 @@ AppAsset::register($this);
             "url" => ["/news/admin/index"]
         ];
     }
+
+    if (!Yii::$app->user->isGuest) {
+        $links[] = [
+            "label" => "my account",
+            "url" => ["/user/settings/profile"]
+        ];
+    }
+
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => $links,
@@ -64,7 +72,6 @@ AppAsset::register($this);
     NavBar::end();
     ?>
 
-    <div class="container">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
