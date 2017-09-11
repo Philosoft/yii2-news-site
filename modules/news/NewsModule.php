@@ -5,6 +5,7 @@ namespace app\modules\news;
 
 
 use app\commands\RbacController;
+use app\models\Profile;
 use app\modules\news\models\News;
 use Da\User\Event\UserEvent;
 use Da\User\Model\User;
@@ -46,11 +47,19 @@ class NewsModule extends Module implements BootstrapInterface
                     foreach (User::find()->where(["IS NOT", "confirmed_at", null])->batch() as $userPack) {
                         foreach ($userPack as $user) {
                             /** @var User $user */
-                            Yii::$app->mailer->compose("new-post", ["post" => $model, "user" => $user])
-                                ->setSubject("New article: {$model->title}")
-                                ->setTo($user->email)
-                                ->setFrom("noreply@example.com")
-                                ->send();
+                            /** @var Profile $profile */
+                            $profile = $user->profile;
+                            if ($profile->notification_type === Profile::NOTIFICATION_TYPE__ALERT) {
+
+                            }
+
+                            if ($profile->notification_type === Profile::NOTIFICATION_TYPE__MAIL) {
+                                Yii::$app->mailer->compose("new-post", ["post" => $model, "user" => $user])
+                                    ->setSubject("New article: {$model->title}")
+                                    ->setTo($user->email)
+                                    ->setFrom("noreply@example.com")
+                                    ->send();
+                            }
                         }
                     }
                 }

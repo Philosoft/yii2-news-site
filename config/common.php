@@ -14,7 +14,13 @@ return [
     "modules" => [
         "user" => [
             "class" => \Da\User\Module::class,
-            "administrators" => ["admin"]
+            "administrators" => ["admin"],
+            "controllerMap" => [
+                "admin" => "app\\controllers\\AdminUsersController"
+            ],
+            "classMap" => [
+                "Profile" => "app\\models\Profile"
+            ]
         ],
     ]
 ];

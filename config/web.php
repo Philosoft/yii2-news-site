@@ -35,11 +35,18 @@ $config = [
                 "/" => "/news/news/index"
             ],
         ],
+        'view' => [
+            'theme' => [
+                'pathMap' => [
+                    '@Da/User/resources/views' => '@app/views/user'
+                ]
+            ]
+        ]
     ],
     'modules' => [
         'news' => [
             'class' => 'app\modules\news\NewsModule',
-            'controllerNamespace' => 'app\modules\news\controllers'
+            'controllerNamespace' => 'app\modules\news\controllers',
         ]
     ],
     'params' => $params,
