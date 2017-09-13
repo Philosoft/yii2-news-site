@@ -4,7 +4,7 @@
 namespace app\modules\news;
 
 
-use app\commands\RbacController;
+use app\helpers\RbacHelper;
 use app\models\Profile;
 use app\modules\news\models\News;
 use app\modules\notification\models\Notification;
@@ -15,7 +15,6 @@ use yii\base\BootstrapInterface;
 use yii\base\Event;
 use yii\base\Module;
 use yii\helpers\Html;
-use yii\helpers\Url;
 
 class NewsModule extends Module implements BootstrapInterface
 {
@@ -30,7 +29,7 @@ class NewsModule extends Module implements BootstrapInterface
                 $authManager = \Yii::$app->authManager;
                 try {
                     $authManager->assign(
-                        $authManager->getRole(RbacController::ROLE__REGISTERED_USER),
+                        $authManager->getRole(RbacHelper::ROLE__REGISTERED_USER),
                         $user->getId()
                     );
                 } catch (\Exception $e) {

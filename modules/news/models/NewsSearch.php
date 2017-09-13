@@ -3,6 +3,7 @@
 namespace app\modules\news\models;
 
 
+use app\helpers\RbacHelper;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
@@ -32,10 +33,7 @@ class NewsSearch extends News
     {
         $query = News::find();
         $user = \Yii::$app->user;
-        if (!in_array(
-            \app\commands\RbacController::ROLE__ADMIN,
-            array_keys(\Yii::$app->authManager->getRolesByUser($user->getId()))
-        )) {
+        if (RbacHelper::checkUserRole(RbacHelper::ROLE__ADMIN)) {
             $query->andWhere(["author_id" => $user->id]);
         }
 

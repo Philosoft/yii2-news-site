@@ -4,6 +4,7 @@
 namespace app\commands;
 
 
+use app\helpers\RbacHelper;
 use app\modules\news\models\News;
 use app\rbac\AuthorRule;
 use yii\console\Controller;
@@ -15,13 +16,6 @@ use yii\helpers\Console;
  */
 class RbacController extends Controller
 {
-    const ROLE__MANAGER = "manager";
-    const ROLE__REGISTERED_USER = "ordinary-user";
-    const ROLE__ADMIN = "admin";
-
-    const USER_ID__ADMIN = 1;
-    const USER_ID__MANAGER = 2;
-
     protected function addAuthItem($item)
     {
         try {
@@ -50,7 +44,7 @@ class RbacController extends Controller
         $this->addAuthItem($readPostPermission);
 
         // ordinary user can only view full articles
-        $registeredUser = $auth->createRole(self::ROLE__REGISTERED_USER);
+        $registeredUser = $auth->createRole(RbacHelper::ROLE__REGISTERED_USER);
         $this->addAuthItem($registeredUser);
         $this->addAuthChild($registeredUser, $readPostPermission);
 
@@ -76,7 +70,7 @@ class RbacController extends Controller
         $this->addAuthItem($createPermission);
 
         // role manager
-        $manager = $auth->createRole(self::ROLE__MANAGER);
+        $manager = $auth->createRole(RbacHelper::ROLE__MANAGER);
         $this->addAuthItem($manager);
         $this->addAuthChild($manager, $registeredUser);
         $this->addAuthChild($manager, $updateOwnPost);
@@ -88,18 +82,18 @@ class RbacController extends Controller
         $this->addAuthItem($deletePermission);
 
         // role admin
-        $admin = $auth->createRole(self::ROLE__ADMIN);
+        $admin = $auth->createRole(RbacHelper::ROLE__ADMIN);
         $this->addAuthItem($admin);
         $this->addAuthChild($admin, $manager);
         $this->addAuthChild($admin, $updatePermission);
         $this->addAuthChild($admin, $deletePermission);
 
         try {
-            $auth->assign($admin, self::USER_ID__ADMIN);
+            $auth->assign($admin, RbacHelper::USER_ID__ADMIN);
         } catch (\Exception $e) {}
 
         try {
-            $auth->assign($manager, self::USER_ID__MANAGER);
+            $auth->assign($manager, RbacHelper::USER_ID__MANAGER);
         } catch (\Exception $e) {}
     }
 }

@@ -9,6 +9,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\helpers\RbacHelper;
 
 AppAsset::register($this);
 ?>
@@ -51,7 +52,10 @@ AppAsset::register($this);
             . '</li>'
         )
     ];
-    if (Yii::$app->user->can(News::PERMISSION__UPDATE)) {
+    if (
+        Yii::$app->user->can(News::PERMISSION__UPDATE)
+        || RbacHelper::checkUserRole(RbacHelper::ROLE__MANAGER)
+    ) {
         $links[] = [
             "label" => "News CRUD",
             "url" => ["/news/admin/index"]
@@ -65,12 +69,7 @@ AppAsset::register($this);
         ];
     }
 
-    if (
-        array_key_exists(
-            \app\commands\RbacController::ROLE__ADMIN,
-            Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId())
-        )
-    ) {
+    if (RbacHelper::checkUserRole(RbacHelper::ROLE__ADMIN)) {
         $links[] = [
             "label" => "Users CRUD",
             "url" => ["/user/admin/index"]
