@@ -30,6 +30,7 @@ class NotificationWidget extends Widget
                     "is_read" => 0
                 ]
             )->all();
+
             return $this->render(
                 "notification",
                 ["notifications" => $notifications]

@@ -51,7 +51,10 @@ class NewsModule extends Module implements BootstrapInterface
                             /** @var User $user */
                             /** @var Profile $profile */
                             $profile = $user->profile;
-                            if ($profile->notification_type === Profile::NOTIFICATION_TYPE__ALERT) {
+                            if (
+                                $profile->notification_type === Profile::NOTIFICATION_TYPE__ALERT
+                                || $profile->notification_type === Profile::NOTIFICATION_TYPE__BOTH
+                            ) {
                                 $notification = new Notification();
                                 $notification->text = strtr(
                                     Yii::$app->getModule("notification")->template,
@@ -67,7 +70,10 @@ class NewsModule extends Module implements BootstrapInterface
                                 $notification->save();
                             }
 
-                            if ($profile->notification_type === Profile::NOTIFICATION_TYPE__MAIL) {
+                            if (
+                                $profile->notification_type === Profile::NOTIFICATION_TYPE__MAIL
+                                || $profile->notification_type === Profile::NOTIFICATION_TYPE__BOTH
+                            ) {
                                 Yii::$app->mailer->compose("new-post", ["post" => $model, "user" => $user])
                                     ->setSubject("New article: {$model->title}")
                                     ->setTo($user->email)
