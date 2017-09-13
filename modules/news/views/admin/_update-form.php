@@ -19,11 +19,13 @@ echo \app\widgets\FlashAlert::widget([
 
 if ($model->isNewRecord === true) {
     $actionUrl = Url::to(["/news/admin/create"]);
+    $action = "create";
 } else {
     $actionUrl = Url::to([
         "/news/admin/update",
         "id" => $model->id
     ]);
+    $action = "update";
 }
 
 $form = ActiveForm::begin([
@@ -53,7 +55,7 @@ echo $form->field($model, "announce")->textarea();
 echo $form->field($model, "content")->textarea();
 
 echo Html::submitButton(
-    "update",
+    $action,
     [
         "class" => "btn btn-success",
     ]
@@ -62,7 +64,7 @@ echo Html::submitButton(
 ActiveForm::end();
 
 $js = <<<ENDJS
-if ($("body").data("news-update-form-handler") !== true) {
+if ($("body").data("news-{$action}-form-handler") !== true) {
     $("body").on("submit", ".news-update-form", function (e) {
         e.preventDefault();
         
@@ -70,7 +72,7 @@ if ($("body").data("news-update-form-handler") !== true) {
         var fd = new FormData(this);
         
         $.ajax(
-            "/news/admin/update?id=" + \$form.data("model-id"),
+            \$form.attr("action"),
             {
                 type: "post",
                 data: fd,

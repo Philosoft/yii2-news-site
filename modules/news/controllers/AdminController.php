@@ -80,18 +80,19 @@ class AdminController extends Controller
             throw new NotFoundHttpException("model with id {$id} cannot be found");
         }
 
-        $renderMethod = Yii::$app->request->isAjax ? "renderAjax" : "render";
+        $request = Yii::$app->request;
+        $renderMethod = $request->isAjax ? "renderAjax" : "render";
 
-        if (Yii::$app->request->isPost) {
-            $model->setAttributes(Yii::$app->request->post("News"));
+        if ($request->isPost) {
+            $model->load($request->post());
             $model->imageFile = UploadedFile::getInstance($model, "imageFile");
             $model->upload();
+
             if ($model->save()) {
                 Yii::$app->session->setFlash(
                     News::FLASH_KEY__UPDATE_STATUS,
                     "successful update"
                 );
-                return $this->$renderMethod("_update-form", ["model" => $model]);
             } else {
                 $errors = [];
                 if (!empty($model->errors)) {
@@ -107,25 +108,22 @@ class AdminController extends Controller
                 if (!empty($errors)) {
                     Yii::$app->session->setFlash(
                         News::FLASH_KEY__UPDATE_STATUS,
-                        "errors: " . Html::ul($errors));
+                        "errors: " . Html::ul($errors)
+                    );
                 }
-
-                return $this->$renderMethod("_update-form", ['model' => $model]);
             }
-        } else {
-            return $this->$renderMethod("update", ["model" => $model]);
         }
+
+        return $this->$renderMethod("update", ["model" => $model]);
     }
 
     public function actionCreate()
     {
         $request = Yii::$app->request;
         $model = new News();
-        if ($request->isGet) {
-            $method = ($request->isAjax && !$request->isPjax) ? "renderAjax" : "render";
-            return $this->$method("_update-form", ['model' => $model]);
-        } else {
-            $model->setAttributes($request->post("News"), false);
+        $renderMethod = $request->isAjax ? "renderAjax" : "render";
+        if (!$request->isGet) {
+            $model->load($request->post());
             $model->author_id = Yii::$app->user->getId();
             if ($model->save()) {
                 $message = "successful save";
@@ -138,11 +136,12 @@ class AdminController extends Controller
                 $message
             );
 
-            return $this->render(
-                "_update-form",
-                ['model' => $model]
-            );
         }
+
+        return $this->$renderMethod(
+            "_update-form",
+            ['model' => $model]
+        );
     }
 
     public function actionToggleStatus()

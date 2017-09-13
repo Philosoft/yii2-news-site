@@ -78,7 +78,7 @@ $this->registerJs(<<<ENDJS
         var modelId = \$this.data("id");
 
         var modal = $("#modal-update");
-        modal.find(".modal-header").text("Updating news #" + modelId);
+        modal.find(".modal-header .post-name").text(modelId);
         modal.find(".modal-body").load(\$this.attr("href"));
         modal.modal("show"); 
     });
@@ -87,13 +87,17 @@ $this->registerJs(<<<ENDJS
         e.preventDefault();
         
         var modal = $("#modal-create");
-        modal.find(".modal-header").text("Create new post");
         modal.find(".modal-body").load("/news/admin/create");
         modal.modal("show");
     });
 ENDJS
 );
 
-echo Modal::widget(["id" => "modal-update"]);
-
-echo Modal::widget(["id" => "modal-create"]);
+echo Modal::widget([
+    "id" => "modal-update",
+    "header" => "Updating post #<span class='post-name'></span>"
+]);
+echo Modal::widget([
+    "id" => "modal-create",
+    "header" => "Create new post"
+]);

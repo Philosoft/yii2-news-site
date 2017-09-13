@@ -80,6 +80,7 @@ class News extends ActiveRecord
                     "announce", "content"
                 ],
                 "string",
+                "min" => 30
             ],
             [
                 "status",
