@@ -23,10 +23,10 @@ class NewsModule extends Module implements BootstrapInterface
         Event::on(
             User::class,
             UserEvent::EVENT_AFTER_REGISTER,
-            function ($event) {
+            function ($event) use ($app) {
                 /** @var User $user */
                 $user = $event->sender;
-                $authManager = \Yii::$app->authManager;
+                $authManager = $app->authManager;
                 try {
                     $authManager->assign(
                         $authManager->getRole(RbacHelper::ROLE__REGISTERED_USER),
@@ -46,7 +46,10 @@ class NewsModule extends Module implements BootstrapInterface
                 $model = $event->sender;
 
                 if ($model->isActive()) {
-                    foreach (User::find()->where(["IS NOT", "confirmed_at", null])->batch() as $userPack) {
+                    $userQuery = User::find()
+                        ->where(["IS NOT", "confirmed_at", null])
+                        ->andWhere(["isBlocked" => false]);
+                    foreach ($userQuery->batch() as $userPack) {
                         foreach ($userPack as $user) {
                             /** @var User $user */
                             /** @var Profile $profile */

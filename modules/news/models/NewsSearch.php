@@ -19,21 +19,42 @@ class NewsSearch extends News
 
     public function rules()
     {
-        $rules = parent::rules();
-
-        $rules[] = [
-            ["date_from", "date_to"],
-            "datetime"
+        return [
+            [
+                ["date_from", "date_to"],
+                "datetime"
+            ],
+            [
+                "id",
+                "integer"
+            ],
+            [
+                "status",
+                "boolean"
+            ],
+            [
+                "announce",
+                "string"
+            ],
+            [
+                [
+                    "date_from",
+                    "date_to",
+                    "id",
+                    "status",
+                    "announce",
+                    "title"
+                ],
+                "safe"
+            ]
         ];
-
-        return $rules;
     }
 
     public function search($params)
     {
         $query = News::find();
         $user = \Yii::$app->user;
-        if (RbacHelper::checkUserRole(RbacHelper::ROLE__ADMIN)) {
+        if (!RbacHelper::checkUserRole(RbacHelper::ROLE__ADMIN)) {
             $query->andWhere(["author_id" => $user->id]);
         }
 
@@ -46,6 +67,7 @@ class NewsSearch extends News
         $query->andFilterWhere(["id" => $this->id]);
         $query->andFilterWhere(["status" => $this->status]);
         $query->andFilterWhere(["like", "title", $this->title]);
+        $query->andFilterWhere(["like", "announce", $this->announce]);
 
         $query->andFilterWhere([">=", "date_added", $this->date_from]);
         $query->andFilterWhere(["<=", "date_added", $this->date_to]);

@@ -50,6 +50,7 @@ use yii\widgets\ActiveForm;
                     ]
                 ]
             );
+            echo $form->field($model, "announce");
             ?>
 
             <div class="form-group">
