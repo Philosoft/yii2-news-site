@@ -9,8 +9,6 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
 
-Pjax::begin(["enablePushState" => false]);
-
 /** @noinspection PhpUnhandledExceptionInspection */
 echo \app\widgets\FlashAlert::widget([
     "flashKey" => \app\modules\news\models\News::FLASH_KEY__UPDATE_STATUS,
@@ -33,9 +31,10 @@ $form = ActiveForm::begin([
     "action" => $actionUrl,
     "options" => [
         "data" => [
-            "pjax" => true
+            "model-id" => $model->id
         ],
-        "id" => "update-form--" . date("His")
+        "id" => "update-form--" . date("His"),
+        "class" => "news-update-form"
     ]
 ]);
 
@@ -56,9 +55,35 @@ echo $form->field($model, "content")->textarea();
 echo Html::submitButton(
     "update",
     [
-        "class" => "btn btn-success"
+        "class" => "btn btn-success",
     ]
 );
 
 ActiveForm::end();
-Pjax::end();
+
+$js = <<<ENDJS
+if ($("body").data("news-update-form-handler") !== true) {
+    $("body").on("submit", ".news-update-form", function (e) {
+        e.preventDefault();
+        
+        var \$form = $(this);
+        var fd = new FormData(this);
+        
+        $.ajax(
+            "/news/admin/update?id=" + \$form.data("model-id"),
+            {
+                type: "post",
+                data: fd,
+                processData: false,
+                contentType: false
+            }
+        )
+        .done(function (data) {
+            \$form.parent().html(data);
+        });
+    });
+    $("body").data("news-update-form-handler", true);
+}
+ENDJS;
+
+$this->registerJs($js);

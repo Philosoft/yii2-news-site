@@ -80,6 +80,8 @@ class AdminController extends Controller
             throw new NotFoundHttpException("model with id {$id} cannot be found");
         }
 
+        $renderMethod = Yii::$app->request->isAjax ? "renderAjax" : "render";
+
         if (Yii::$app->request->isPost) {
             $model->setAttributes(Yii::$app->request->post("News"));
             $model->imageFile = UploadedFile::getInstance($model, "imageFile");
@@ -89,7 +91,7 @@ class AdminController extends Controller
                     News::FLASH_KEY__UPDATE_STATUS,
                     "successful update"
                 );
-                return $this->renderAjax("_update-form", ["model" => $model]);
+                return $this->$renderMethod("_update-form", ["model" => $model]);
             } else {
                 $errors = [];
                 if (!empty($model->errors)) {
@@ -108,14 +110,10 @@ class AdminController extends Controller
                         "errors: " . Html::ul($errors));
                 }
 
-                return $this->renderAjax("_update-form", ['model' => $model]);
+                return $this->$renderMethod("_update-form", ['model' => $model]);
             }
         } else {
-            if (Yii::$app->request->isAjax) {
-                return $this->renderAjax("_update-form", ["model" => $model]);
-            } else {
-                return $this->render("update", ["model" => $model]);
-            }
+            return $this->$renderMethod("update", ["model" => $model]);
         }
     }
 
