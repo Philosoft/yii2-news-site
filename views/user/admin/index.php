@@ -29,7 +29,19 @@ $module = Yii::$app->getModule('user');
 
 <?php $this->beginContent('@Da/User/resources/views/shared/admin_layout.php') ?>
 
+<?php
+echo \yii\bootstrap\Modal::widget(["id" => "create-modal"]);
+?>
 
+<?php
+echo Html::a(
+    "<span class='glyphicon glyphicon-plus'></span> create",
+    ["/user/admin/ajax-create"],
+    [
+        "class" => "btn btn-success ajax-btn"
+    ]
+)
+?>
 <?php Pjax::begin() ?>
 
 <?= GridView::widget(
@@ -38,6 +50,7 @@ $module = Yii::$app->getModule('user');
         'filterModel' => $searchModel,
         'layout' => "{items}\n{pager}",
         'columns' => [
+            'id',
             'username',
             'email:email',
             [
@@ -149,5 +162,19 @@ $module = Yii::$app->getModule('user');
 ); ?>
 
 <?php Pjax::end() ?>
+
+<?php
+$js = <<<ENDJS
+    $(".ajax-btn").click(function (e) {
+        e.preventDefault();
+
+        var modal = $("#create-modal");
+        modal.find(".modal-body").load($(this).attr("href"));
+        modal.modal("show");
+    });
+ENDJS
+;
+$this->registerJs($js);
+?>
 
 <?php $this->endContent() ?>
