@@ -2,16 +2,16 @@
 /**
  * @var \yii\web\View $this
  * @var \yii\data\ActiveDataProvider $dataProvider
- * @var \app\modules\news\models\NewsSearch $filterModel
+ * @var NewsSearch $filterModel
  */
 
 
 use app\modules\news\models\News;
+use app\modules\news\models\NewsSearch;
+use kartik\daterange\DateRangePicker;
 use yii\bootstrap\Modal;
 use yii\grid\GridView;
 use yii\helpers\Html;
-
-echo $this->render("_search", ["model" => $filterModel]);
 
 echo Html::a(
     "<span class=\"glyphicon glyphicon-plus\"></span> create",
@@ -35,9 +35,30 @@ echo GridView::widget([
             "attribute" => "status",
             "action" => "/news/admin/toggle-status",
             "ajaxMethod" => "GET",
+            "filter" => Html::activeDropDownList(
+                $filterModel,
+                "status",
+                $filterModel->getStatusSelection(),
+                [
+                    "class" => "form-control"
+                ]
+            )
         ],
         "title",
-        "date_added",
+        [
+            "attribute" => "date_added",
+            "filter" => DateRangePicker::widget([
+                "model" => $filterModel,
+                "attribute" => "date",
+                "pluginOptions" => [
+                    "locale" => [
+                        "format" => "YYYY-MM-DD",
+                        "separator" => NewsSearch::DATE_SEPARATOR
+                    ]
+                ]
+            ])
+        ],
+        "announce",
         [
             "class" => 'yii\grid\ActionColumn',
             "buttons" => [

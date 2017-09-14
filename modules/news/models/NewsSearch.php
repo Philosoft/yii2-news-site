@@ -9,6 +9,10 @@ use yii\data\ActiveDataProvider;
 
 class NewsSearch extends News
 {
+    const STATUS_ANY = 2;
+    const DATE_SEPARATOR = " to ";
+
+    public $date;
     public $date_from;
     public $date_to;
 
@@ -43,10 +47,20 @@ class NewsSearch extends News
                     "id",
                     "status",
                     "announce",
-                    "title"
+                    "title",
+                    "date"
                 ],
                 "safe"
             ]
+        ];
+    }
+
+    public function getStatusSelection()
+    {
+        return [
+            self::STATUS_ANY => "any",
+            self::STATUS_INACTIVE => "disabled",
+            self::STATUS_ACTIVE => "enabled",
         ];
     }
 
@@ -65,9 +79,15 @@ class NewsSearch extends News
         }
 
         $query->andFilterWhere(["id" => $this->id]);
-        $query->andFilterWhere(["status" => $this->status]);
+        if ($this->status != self::STATUS_ANY) {
+            $query->andFilterWhere(["status" => $this->status]);
+        }
         $query->andFilterWhere(["like", "title", $this->title]);
         $query->andFilterWhere(["like", "announce", $this->announce]);
+
+        if (!empty($this->date)) {
+            list($this->date_from, $this->date_to) = explode(self::DATE_SEPARATOR, $this->date);
+        }
 
         $query->andFilterWhere([">=", "date_added", $this->date_from]);
         $query->andFilterWhere(["<=", "date_added", $this->date_to]);
