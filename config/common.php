@@ -1,6 +1,6 @@
 <?php
 
-return [
+$commonConfig = [
     "components" => [
         "authManager" => [
             "class" => "Da\\User\\Component\\AuthDbManagerComponent"
@@ -19,8 +19,21 @@ return [
                 "admin" => "app\\controllers\\AdminUsersController"
             ],
             "classMap" => [
-                "Profile" => "app\\models\Profile"
+                "Profile" => "app\\models\Profile",
+                "UserSearch" => "app\\models\\UserSearch"
             ]
         ],
     ]
 ];
+
+$localCommonConfig = [];
+$localConfigFile = __DIR__ . "/common-local.php";
+
+if (is_readable($localConfigFile)) {
+    $localCommonConfig = require($localConfigFile);
+}
+
+return array_merge_recursive(
+    $commonConfig,
+    $localCommonConfig
+);
