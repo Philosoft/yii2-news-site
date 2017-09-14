@@ -48,7 +48,7 @@ class NewsModule extends Module implements BootstrapInterface
                 if ($model->isActive()) {
                     $userQuery = User::find()
                         ->where(["IS NOT", "confirmed_at", null])
-                        ->andWhere(["isBlocked" => false]);
+                        ->andWhere(["IS", "blocked_at", null]);
                     foreach ($userQuery->batch() as $userPack) {
                         foreach ($userPack as $user) {
                             /** @var User $user */
