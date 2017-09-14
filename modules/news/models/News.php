@@ -131,7 +131,7 @@ class News extends ActiveRecord
         if (!empty($this->image)) {
             return "/uploads/{$this->image}";
         } else {
-            return "http://placehold.it/150x150";
+            return "https://placekitten.com/150/150";
         }
     }
 
