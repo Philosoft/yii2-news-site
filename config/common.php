@@ -1,6 +1,6 @@
 <?php
 
-$commonConfig = [
+return [
     "components" => [
         "authManager" => [
             "class" => "Da\\User\\Component\\AuthDbManagerComponent"
@@ -25,15 +25,3 @@ $commonConfig = [
         ],
     ]
 ];
-
-$localCommonConfig = [];
-$localConfigFile = __DIR__ . "/common-local.php";
-
-if (is_readable($localConfigFile)) {
-    $localCommonConfig = require($localConfigFile);
-}
-
-return array_merge_recursive(
-    $commonConfig,
-    $localCommonConfig
-);
