@@ -80,7 +80,7 @@ class NewsModule extends Module implements BootstrapInterface
                                 Yii::$app->mailer->compose("new-post", ["post" => $model, "user" => $user])
                                     ->setSubject("New article: {$model->title}")
                                     ->setTo($user->email)
-                                    ->setFrom("noreply@example.com")
+                                    ->setFrom(Yii::$app->params["emailFrom"])
                                     ->send();
                             }
                         }
