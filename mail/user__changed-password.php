@@ -1,0 +1,1 @@
+<p>Your password has been changed. If you did not do it - contact support immediately.</p>

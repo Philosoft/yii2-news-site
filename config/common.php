@@ -1,5 +1,7 @@
 <?php
 
+require __DIR__ . "/common-events.php";
+
 return [
     "components" => [
         "authManager" => [
