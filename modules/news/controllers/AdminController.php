@@ -102,7 +102,6 @@ class AdminController extends Controller
                         },
                         array_values($model->errors)
                     );
-                    $errors[] = $model->date_modified;
                 }
 
                 if (!empty($errors)) {
