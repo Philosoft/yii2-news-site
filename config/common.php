@@ -23,6 +23,10 @@ return [
             "classMap" => [
                 "Profile" => "app\\models\Profile",
                 "UserSearch" => "app\\models\\UserSearch"
+            ],
+            "mailParams" => [
+                "fromEmail" => "philosoft@yandex.ru",
+                "welcomeMailSubject" => "Welcome to yii2 news site"
             ]
         ],
     ]
