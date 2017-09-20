@@ -68,7 +68,7 @@ if (is_readable($commonLocalConfigFile)) {
     $commonLocalConfig = require ($commonLocalConfigFile);
 }
 
-$config = array_merge_recursive(
+$config = \yii\helpers\ArrayHelper::merge(
     $config,
     $commonConfig,
     $commonLocalConfig
